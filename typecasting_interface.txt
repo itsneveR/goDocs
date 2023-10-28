@@ -1,0 +1,2 @@
+. https://github.com/golang/go/wiki/InterfaceSlice
+. https://stackoverflow.com/questions/12753805/type-converting-slices-of-interfaces
