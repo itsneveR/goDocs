@@ -1,0 +1,44 @@
+questions :
+
+-what's an interface?
+
+
+-why do we need interfaces? what problem do they solve?
+    it helps us to write more flexible and reusable code. as you can write functions that accept 
+    any type that implements the interface, rather than having to write separate functions for each type.
+
+
+-in what way do interfaces help us in Go?
+   ~ interface types enable Go to support (value boxing) 
+                    value boxing: Boxing is the process of converting a primitive datatype(int,float ..) into an object datatype
+
+    ~through value boxing, (reflection) and (polymorphism) get supported.
+
+
+-how do we use interfaces?
+    ~Value Boxing :
+     (check out valueBoxing.go and valueBoxing_2.go  files)
+    We can view each (interface value) as a box to encapsulate a non-interface value(like an struct).
+
+    If a type (T) implements an interface type (I),
+    then any value of type (T) can be implicitly converted to type (I).
+    
+    In other words, any value of type T is assignable to (modifiable) values of type I. When a T value is converted (assigned) to an I value,
+    
+    
+    
+        When a value is boxed in an interface value,(var box interface{}  n := 5  box = n )
+        the value is called (the dynamic value) of the interface value.(5)
+        The type of the dynamic value is called (the dynamic type) of the interface value.(int)
+
+           *NOTE: As any type inherently implements all blank interface types,
+            so any non-interface value can be boxed in (or assigned to) a blank interface value(interface{}).
+            For this reason, (blank interface types) can be viewed as the (any type) in many other languages.
+
+
+    ~polymorphism: 
+    When a non-interface value (t) of a type T is boxed in an interface value (i) of type I interface,
+    calling a method specified by the interface type (I) on the interface value (i) will 
+    call the corresponding method declared for the non-interface type (T) on the non-interface value (t) actually.
+  
+-what are frequently used interfaces in go?

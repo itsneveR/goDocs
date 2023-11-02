@@ -1,0 +1,17 @@
+
+{
+
+    interface : io.reader
+    method: read(p []byte) (n int,err error)
+
+}
+
+using interface : (r io.reader)
+
+call -> r.read([]byte)
+
+method implementaion -> func (t TYPE) read(p []byte) (n int,err error) {}
+
+
+TYPE == an io.reader interface 
+
