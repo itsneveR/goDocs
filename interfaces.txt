@@ -41,4 +41,22 @@ questions :
     calling a method specified by the interface type (I) on the interface value (i) will 
     call the corresponding method declared for the non-interface type (T) on the non-interface value (t) actually.
   
+
+    ~Reflection :
+    The dynamic type information stored in an interface value 
+    can be used to inspect the dynamic value of the interface value 
+    and manipulate the values referenced by the dynamic value. 
+    This is called (reflection) in programming.
+
+     In Go, built-in reflections are achieved with (type assertions)
+    and (type-switch) control flow code blocks.
+
+    ~Type assertion:
+        
+        2. interface to interface (source interface type implements the destination interface type)
+        3. interface to non-interface (non-interface type implements the interface type)
+        4. interface to interface - the dynamic type of the source interface value might implement the destination interface type-
+
+    ~type assertion syntax : interface.(Type) [i.(T)] i = asserted value , T = asserted type 
+                                                      i = interface value , T = type name or a type literal
 -what are frequently used interfaces in go?

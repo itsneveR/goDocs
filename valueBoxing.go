@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"io"
+)
 
 func main() {
 	/*
@@ -24,4 +27,6 @@ func main() {
 	box = s
 
 	fmt.Println(box)
+
+	io.ByteReader
 }
