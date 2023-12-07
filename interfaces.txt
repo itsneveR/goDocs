@@ -1,5 +1,8 @@
 questions :
 
+    interfaces are simply the regular types(byte,struct..) but with extra methods, 
+    an interface is like a wrapper around a regular type to add methods to it, so it would be easier to work with that type 
+
 -what's an interface?
 
 
