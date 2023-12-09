@@ -1,0 +1,39 @@
+CSP = communicating sequential processes 
+    a feature which will help us solve most of concurrnecy problems. 
+        channels and Goroutines in Go help us with CSP(communicating sequential processes)
+
+        
+
+Channels:(a data type)
+    1.they're uni-directional(one-way communication pipe)
+        stuff goes in one end and comes out the other end -in order-
+                (write)             (read)
+
+        in go it's safe for a channel to have multiple readers and writers 
+
+        -channels are a way of (synchronization) as well as (communication)
+
+        -(sharing) in a concurrnet program is BAD but instead we can (transfer the ownership of data)
+            channels act as a vehicle for transferring ownership of data between Goroutines (avoid race condition)
+            *don't communicate by sharing memory; instead share memory by communicating
+
+
+one common pattern of using channels is to use a write only channel inside a function then run a that function through a loop as a go routine
+then using another loop to read the things inside the channel, since the channel blocks while there's nothing to read, we have a safe concurrency.
+   
+    for {
+        go funcWithChannel()
+    }
+
+    for{
+        input := <- channel
+    }
+
+Goroutines:(coroutine)
+    a Goroutines is a unit of independent execution
+
+            we have to know how the Goroutine will stop, otherwise we'll have data race issues and memory leaks
+                -you have a well defined loop terminating condition, or 
+                -you signal completion through a channel or context, or
+                -you let it run until the program stops  
+
