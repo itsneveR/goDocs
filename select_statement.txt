@@ -1,0 +1,19 @@
+- select is a control srtucture that works on the channels 
+    we use select when we have multiple channels and we dont know when one would be ready to write or read
+    select statement would allow us to use a channels when its ready. 
+
+    we usually use select inside a for loop 
+
+    for range list {
+		select {
+		case r := <-result:
+			if r.err != nil {
+				log.Println(r.url, "  ", r.err)
+			} else {
+				log.Println(r.url, "   ", r.timeout)
+			}
+		case <-stopper:
+			log.Println("timeout")
+		}
+
+	}
