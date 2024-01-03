@@ -1,3 +1,6 @@
+must read: https://go.dev/blog/context
+
+
 the Context package offers a common method to cancel requests
 
     -explixt cancellation (you just call the cancel function)
