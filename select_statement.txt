@@ -17,3 +17,33 @@
 		}
 
 	}
+
+
+    example : ticker 
+    func main() {
+
+	const tickRate = 2 * time.Second
+
+	stopper := time.After(5 * tickRate)
+
+	ticker := time.NewTicker(tickRate).C
+	log.Println("start")
+loop:
+	for {
+		select {
+		case <-ticker:
+			log.Println("tick")
+		case <-stopper:
+			break loop
+		}
+	}
+	log.Println("stopped")
+}
+
+it's very common to have a select statement either with a timeout or a ticker that causes us to do something every so often 
+    for example i have a server whose purpose is every 10 minutes to go and update Redis cache to prewarm the cache with some data.
+    so basically program have a 10min ticker which sits in a select and FOR loop and every 10 minutes warms the cache 
+
+
+
+do not use a default case inside a loop 

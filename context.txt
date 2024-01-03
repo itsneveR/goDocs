@@ -1,0 +1,24 @@
+the Context package offers a common method to cancel requests
+
+    -explixt cancellation (you just call the cancel function)
+    -implicit cancellation based on timeout or deadline 
+        (when time is out, the channel signals)
+
+   *context work with select, make sure you know enough about them.
+
+    a context offers two controls: 
+       - a channel that closes(can be read from/can't be written into) when the cancellation occures  
+       - an error that's readable once channel closes
+                the error tells you whether the request was cancelled or timed out 
+
+
+                we often use the channel from Done() function in a Select block 
+
+
+    a context is an immutable tree structure.
+
+
+    *the context value should always be the first parameter in the function body. (convention)
+        func MYFUNC(ctx context.Context, urls []string) (int) {...}
+
+-
