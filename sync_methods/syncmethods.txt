@@ -1,0 +1,139 @@
+/*
+	/////why do we even use synchronization?//////////
+
+	simple answer : to avoid data competition
+		what is data competition?
+			data contention(competition) arises percisely because of non-atomic operations,
+			some Go Routines are fast and some slow so each execution of the same instruction may have a
+			differnt result.
+				(an atomic operation is a task or operation which can not be split into smaller subtasks
+					for example : a = 1 or a = a+1 is a non-atomic task)
+
+					look at the code below:
+					import "sync"
+					func add(w *sync.WaitGroup, num *int) {
+						defer w.Done()
+						*num= *num + 1
+					}
+
+					func main() {
+						var n int = 0
+						var wg *sync.WaitGroup = new(sync.WaitGroup)
+						wg.Add(1000)
+						for i := 0; i < 1000; i = i + 1 {
+						go add(wg, &n)
+						} // spawn 1000 new goroutines
+						wg.Wait()
+						println(n)
+					}
+
+					we'll probably never get the 1000 as a result, why? because of the race condition
+					that occurs while raeding, modifying and writing the num variable.
+
+
+					Concurrency that does not generate data contention is called thread-safe concurrency.
+					No one wants to run their code with an uncontrolled result every time,
+					so let’s look at the concurrency synchronization techniques that Golang provides.
+
+
+						--sync/atomic:
+							this package provides support for atomic operations in order to synchronize
+							reads and writes of integers and pointers.
+
+							/There are five types of operations:
+							 add, subtract, compare and swap, load, store, and swap.
+
+							/The types supported by atomic operations include:
+							 int32, int64, uint32, uint64, uintptr, unsafe.Pointer.
+
+
+							 for the above example,
+							replace *num = *num + 1 with the atomic operation provided by the sync/atomic package:
+
+							func add(w *sync.WaitGroup, num *int34) {
+								defer w.done()
+								atomic.AddInt32(num,1)
+							}
+
+
+			NOTE: atomic operations are limited in the number of operations they can support,
+			and most rely on sync packages and channels.
+
+							--sync.WaitGroup:
+
+							The sync.WaitGroup struct in the sync package is used to wait for
+							a group of goroutines to finish executing, and control is blocked until
+							the group of goroutines finishes executing.
+
+							Each sync.WaitGroup value maintains an internal count,
+							which initially defaults to zero.
+
+							For an addressable sync.WaitGroup value wg:
+							wg.Add(delta) to change the value of the count maintained by wg,
+
+							wg.Done() and wg.Add(-1) are exactly equivalent
+
+							If a wg.Add(delta) or wg.Done() call changes the count maintained by wg to
+							a negative number, a panic will be generated.
+
+							When wg.Wait() is called by a goroutine if the count maintained by wg is zero,
+							the wg.Wait() operation is a null operation; otherwise (the count is a positive integer),
+							the goroutine will go into a blocking state, and when some other goroutine later changes the count
+							to zero (typically by calling wg.Done()), the concurrent process will re-enter the running state (i.e. wg.Wait() will return)
+							For an example, see the sync/atomic example above. The main goroutine will go into a blocking state
+							to wait for 1000 to complete, after which the main goroutine will unblock.
+
+
+							--sync.Mutex:
+							If the goroutine state is locked, m.Lock() will be blocked until another goroutine calls m.Unlock()
+							to release the lock, and m.Unlock() to change the state to unlocked.
+
+								import "sync"
+								var num int = 0
+								func add(lc *sync.Mutex, wg *sync.WaitGroup) {
+									defer wg.Done()
+									for i := 0; i < 100000; i = i + 1 {
+										lc.Lock()
+										num = num + 1
+										lc.Unlock()
+									}
+								}
+								func minus(lc *sync.Mutex, wg *sync.WaitGroup) {
+									defer wg.Done()
+									for i := 0; i < 100000; i = i + 1 {
+										lc.Lock()
+										num = num - 1
+										lc.Unlock()
+									}
+								}
+								func main() {
+									var mutex *sync.Mutex = new(sync.Mutex)
+									var wg *sync.WaitGroup = new(sync.WaitGroup)
+									wg.Add(2)
+									go add(mutex, wg)
+									go minus(mutex, wg)
+									wg.Wait()
+
+									println(num) // 0
+								}
+
+
+								--sync.Pool:
+								sync.Pool can be used to cache objects, since frequent use of heap memory
+								can cause too much work for GC.
+
+
+									---A memory pool == Region-based memory management :  preallocating a number of memory blocks with the same size called the memory pool.
+									The application can allocate, access, and free blocks represented by handles at run time.
+									 memory pool is a technique of automatically deallocating memory
+									based on the state of the application, such as the lifecycle of a request or transaction.
+									The idea is that many applications execute large chunks of code which may generate
+									memory allocations, but that there is a point in execution where all of those chunks are known to
+									be no longer valid. For example, in a web service, after each request the web service no longer
+									needs any of the memory allocated during the execution of the request. Therefore, rather than
+									keeping track of whether or not memory is currently being referenced, the memory is allocated
+									according to the request and/or lifecycle stage it is associated with.
+									When that request or stage has passed, all associated memory is deallocated simultaneously.
+
+
+*/

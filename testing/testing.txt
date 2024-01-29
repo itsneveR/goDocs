@@ -1,0 +1,101 @@
+/*
+	you should always -> import "testing"
+
+	in go, test files are separate from the actual code file, we need a test file linked to
+	the actual file, it's done by adding _test.go at the end of a test file.
+		:: test file must always end with _test.go::
+
+	By convention, Go testing files are always located in the same folder, or package,
+	where the code they are testing resides.
+	These files are not built by the compiler when you run the go build command,
+	so you needn’t worry about them ending up in deployments.
+
+	check out the math EXAMPLE below to learn more.
+
+layers of testing:
+			_________________________________
+			|	chaos testing				|
+			|_______________________________|
+			|	system testing  			|
+			|_______________________________|
+			|	Load/performance testing	|					Tester Testing
+			|_______________________________|
+			|	end to end testing			|
+	________|_______________________________|________________________________________
+			|								|
+			|_______________________________|
+			|	Integration testing 		|					Developer Testing
+			|_______________________________|
+			| 	Unit testing				|
+			|_______________________________|
+
+	A Unit Test is a function that tests a specific piece of code from a program or package.
+	::
+
+*/
+
+/* EXMPLE:: math explained
+
+step1:  we want to run a unit test for the math.go package I wrote,
+		first step is to write a test file linked to the math.go and it shoud end with _test.go,
+		so we create a math_test.go file.
+
+step2: all test functions in go should follow this structure:
+						func TestXxxx(t *testing.T){...}
+								:: so they have to start with the word Test
+								:: followed by a suffix whose first word is capitalized.
+								::Test functions in Go receive only one parameter,
+								 and in this case, it’s a pointer of type testing.T.
+								 This type contains useful methods that you will need to output
+								 results, log errors to the screen, and signal failures..
+								 like the t.Errorf() method.
+
+									 	:::: check out the math_test.go file!
+
+		run :: "go test" or "go test -v" for more verbose version
+
+
+step3: table driven tests:
+		a table driven test is like a regular test but you create more than one test case
+		and expected situations:: check out the math_test.go file!
+
+step4: coverage tests in go::
+		When writing tests, it is often important to know how much of your actual code the tests cover.
+
+			Run "go test -coverprofile=coverage.out"
+			Go saved this coverage data in the file coverage.out. Now you can present the results in a web browser.
+
+	Run the following command:
+    "go tool cover -html=coverage.out"
+
+
+
+								////benchmarking/////
+
+			benchmarking measures the performance of a function or program.
+
+			This allows you to compare implementations and to understand the impact of the changes you make
+			to your code. Using that information, you can reveal parts of your Go source code worth optimizing.
+
+	step 1:
+	benchmark functions the the following form:
+			func BenchmarkXxx(b *testing.B){..}
+
+	step 2:
+	"go test" will execute these benchmarks when you provide the -bench flag.
+	 Benchmarks are run sequentially.
+
+	 	check out the math_test.go to see how benchmark function works.
+
+		we you run:
+				"go test -bench=." The "." will match every benchmark function in a file
+
+		but when you run :
+				"go test -bench=Add" you only benchmarking the Add function.
+
+
+
+
+*/
+	
+	
