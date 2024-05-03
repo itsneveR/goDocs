@@ -1,0 +1,30 @@
+~https://go.dev/blog/laws-of-reflection
+
+-At the basic level, reflection is just a mechanism to examine the type and value pair stored inside an interface variable.
+
+A variable of interface type stores a pair:  the (value, type) pair
+
+        /the concrete value assigned to the variable(interface) - the value is the underlying concrete data item that implements the interface
+        /value’s type descriptor -the type describes the full type of that item\
+
+            ex: 
+                1:  type x io.Reader
+
+                2:  myfile, _ := os.OpenFile("...",...)
+                
+                3:  x = myfile
+
+                here -x- is an variable of type interface, we said each variable of type interface stores a (value,type) pair 
+                at the first line the variable (x) has no value so the pair looks like this -> (nil,nil) 
+                at the third line the variable x has been assigned the value of (myfile) with type os.*File, 
+                    so the pair looks like -> (myfile,*os.File)
+
+
+
+            ~first law of reflection :
+                At the basic level, reflection is just a mechanism to examine the type and value pair stored inside an interface variable
+                the package "reflect" helps us determine and manipulate the (value,type) pair
+                
+                 -there are two types we need to know about in package reflect: Type and Value. 
+                    Those two types give access to the contents of an interface variable, and two simple functions, called reflect.TypeOf and reflect.ValueOf
+                    
