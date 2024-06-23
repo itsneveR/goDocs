@@ -1,0 +1,46 @@
+https://research.swtch.com/interfaces
+
+interface type, represents a fixed sets of methods, just like int type represents an integer 
+
+
+polymorphic code : 
+polymorphism is the use of a single symbol to represent multiple different types
+
+
+Parametric polymorphism means,
+         we don't care about the type, we'll implement the function the same for any type
+
+Ad-hoc polymorphism (aka method overloading), however, means,
+         that we'll use a different implementation depending on the type of the parameter.
+         polymorphic functions can be applied to different types
+
+
+Some people say that Go’s interfaces are dynamically typed, but that is misleading. 
+They are statically typed: a variable of interface type always has the same static type, and even though at run time the value stored in the interface variable may change type, that value will always satisfy the interface.
+
+
+Interfaces aren't restricted to static checking, though.
+ You can check dynamically whether a particular interface value has an additional method. For example:
+
+type Stringer interface {
+    String() string
+}
+
+func ToString(any interface{}) string {
+    if v, ok := any.(Stringer); ok {
+        return v.String()
+    }
+    switch v := any.(type) {
+    case int:
+        return strconv.Itoa(v)
+    case float:
+        return strconv.Ftoa(v, 'g', -1)
+    }
+    return "???"
+}
+The value any has static type interface{}, meaning no guarantee of any methods at all: it could contain any type. 
+The “comma ok” assignment inside the if statement asks whether it is possible to convert any to an interface value of type Stringer, which has the method String.
+ If so, the body of that statement calls the method to obtain a string to return. Otherwise, the switch picks off a few basic types before giving up.
+  This is basically a stripped down version of what the fmt package does.
+
+  
